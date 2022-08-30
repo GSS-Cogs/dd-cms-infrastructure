@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: plone
+  name: plone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: plone
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: plone
+    spec:
+      containers:
+        - image: europe-west2-docker.pkg.dev/rising-field-357509/ccv2/plone
+          name: plone
+          resources: {}
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+      dnsPolicy: Default

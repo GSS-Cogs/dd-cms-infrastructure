@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ccv2-plone
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-staging"
+    nginx.ingress.kubernetes.io/rewrite-target: "/VirtualHostBase/https/beta2.climate-change.data.gov.uk/Plone/++api++/VirtualHostRoot/$1"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/server-snippet: |
+      gzip on;
+
+spec:
+  tls:
+    - hosts:
+        - beta2.climate-change.data.gov.uk
+      secretName: beta2-cert
+  rules:
+    - host: beta2.climate-change.data.gov.uk
+      http:
+        paths:
+          - path: /\+\+api\+\+($|/.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: plone
+                port:
+                  number: 8080

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: volto
+  name: volto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: volto
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: volto
+    spec:
+      containers:
+        - env:
+            - name: NODE_ENV
+              value: production
+          image: europe-west2-docker.pkg.dev/rising-field-357509/ccv2/volto
+          #          image: climate-change-v2_volto
+          #          imagePullPolicy: Never
+          name: volto
+          resources: {}
+      restartPolicy: Always
